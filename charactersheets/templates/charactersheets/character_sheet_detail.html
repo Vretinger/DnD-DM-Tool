@@ -1,0 +1,433 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %}{{ sheet.name }}'s Character Sheet{% endblock %}
+
+{% block content %}
+    <div class="container character-sheet">
+        <!-- Basic Info Section -->
+        <section class="basic-info row">
+            <div class="col-md-4">
+                <h2>{{ character.name }}</h2>
+                <p>Class: {{ character.character_class }}</p>
+                <p>Race: {{ character.race }}</p>
+                <p>Level: {{ character.level }}</p>
+            </div>
+        </section>
+    
+        <!-- Attributes Section -->
+        <div class="container text-center text-uppercase">
+            <div class="row">
+                <div class="col-1 attributes">
+                    <div class="card text-center mb-1">
+                        <p class="card-text">Strength</p>
+                        <h5 class="card-title pt-1 mb-0">{{ strength_modifier }}</h5>
+                        <p class="card-number">{{ character.strength }}</p>
+                    </div>                      
+                </div>                                        
+                <div class="col-1 attributes">
+                    <div class="card text-center mb-1">
+                        <p class="card-text">Dexterity</p>
+                        <h5 class="card-title pt-1 mb-0">{{ dexterity_modifier }}</h5>
+                        <p class="card-number">{{ character.dexterity }}</p>
+                    </div>
+                </div>
+                <div class="col-1 attributes">
+                    <div class="card text-center mb-1">
+                        <p class="card-text">Constitution</p>
+                        <h5 class="card-title pt-1 mb-0">{{ constitution_modifier }}</h5>
+                        <p class="card-number">{{ character.constitution }}</p>
+                    </div>
+                </div>
+                <div class="col-1 attributes">
+                    <div class="card text-center mb-1">
+                        <p class="card-text">Intelligence</p>
+                        <h5 class="card-title pt-1 mb-0">{{ intelligence_modifier }}</h5>
+                        <p class="card-number">{{ character.intelligence }}</p>
+                    </div>
+                </div>
+                <div class="col-1 attributes">
+                    <div class="card text-center mb-1">
+                        <p class="card-text">Wisdom</p>
+                        <h5 class="card-title pt-1 mb-0">{{ wisdom_modifier }}</h5>
+                        <p class="card-number">{{ character.wisdom }}</p>
+                    </div>
+                </div>
+                <div class="col-1 attributes">
+                    <div class="card text-center mb-1">
+                        <p class="card-text">Charisma</p>
+                        <h5 class="card-title pt-1 mb-0">{{ charisma_modifier }}</h5>
+                        <p class="card-number">{{ character.charisma }}</p>
+                    </div>
+                </div>
+                <div class="col-1 attributes">
+                    <div class="card text-center mb-1">
+                        <p class="card-text">Proficiency</p>
+                        <h5 class="card-title pt-1">{{ proficiency_bonus }}</h5>
+                        <p class="card-text">Bonus</p>
+                    </div>
+                </div>
+                <div class="col-1 attributes">
+                    <div class="card text-center mb-1">
+                        <p class="card-text">Walking</p>
+                        <h5 class="card-title pt-1">{{ character.walking_speed }}</h5>
+                        <p class="card-text">Speed</p>
+                    </div>
+                </div>
+                <div class="col-1 attributes">
+                    <div class="card text-center mb-1">
+                        <h5 class="card-title">{{ character.heroic_inspiration }}</h5>
+                    </div>
+                    <p class="card-text">Heroic Inspiration</p>
+                </div>
+                <div class="col-3 card text-center attributes">
+                    <div class="row">
+                        <!-- Heal and Damage Buttons -->
+                        <div class="col-3">
+                            <form method="POST" action="{% url 'update_health' character.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" name="heal">Heal</button>
+                                <input type="number" name="health_modifier_amount" min="1" placeholder="Amount">
+                                <button type="submit" name="damage">Damage</button>
+                            </form>
+                        </div>
+                        <!-- Current Health Display -->
+                        <div class="col-6">
+                            <p>Current  Max</p>
+                            <p>{{ character.current_health }}/{{ character.max_health }}</p>
+                        </div>
+                        <!-- Temporary Health Display -->
+                        <div class="col-3">
+                            <p>{{ character.temp_health }}</p>
+                        </div>
+                    </div>   
+                </div>
+            </div>
+        <!-- Continue for other attributes -->
+        </div>
+    
+        <!-- Skills Section -->
+        <div class="container text-center mt-2">
+            <div class="row">
+                <div class="col-3">
+                    <div class="container text-center">
+                        <div class="row row-cols-2">
+                            <div class="saving-throw">
+                                {% if is_proficient %}
+                                    <!-- Proficient: Filled circle icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-circle-fill" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="8"/>
+                                    </svg>
+                                {% else %}
+                                    <!-- Not proficient: Empty circle icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    </svg>
+                                {% endif %}
+                                <span>STR</span>
+                                <span>{{ strength_modifier }}</span>
+                            </div>
+                            <div class="saving-throw">
+                                {% if is_proficient %}
+                                    <!-- Proficient: Filled circle icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-circle-fill" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="8"/>
+                                    </svg>
+                                {% else %}
+                                    <!-- Not proficient: Empty circle icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    </svg>
+                                {% endif %}
+                                <span>DEX</span>
+                                <span>{{ dexterity_modifier }}</span>
+                            </div>
+                            <div class="saving-throw">
+                                {% if is_proficient %}
+                                    <!-- Proficient: Filled circle icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-circle-fill" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="8"/>
+                                    </svg>
+                                {% else %}
+                                    <!-- Not proficient: Empty circle icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    </svg>
+                                {% endif %}
+                                <span>CON</span>
+                                <span>{{ constitution_modifier }}</span>
+                            </div>
+                            <div class="saving-throw">
+                                {% if is_proficient %}
+                                    <!-- Proficient: Filled circle icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-circle-fill" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="8"/>
+                                    </svg>
+                                {% else %}
+                                    <!-- Not proficient: Empty circle icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    </svg>
+                                {% endif %}
+                                <span>INT</span>
+                                <span>{{ intelligence_modifier }}</span>
+                            </div>
+                            <div class="saving-throw">
+                                {% if is_proficient %}
+                                    <!-- Proficient: Filled circle icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-circle-fill" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="8"/>
+                                    </svg>
+                                {% else %}
+                                    <!-- Not proficient: Empty circle icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    </svg>
+                                {% endif %}
+                                <span>WIS</span>
+                                <span>{{ wisdom_modifier }}</span>
+                            </div>
+                            <div class="saving-throw">
+                                {% if is_proficient %}
+                                    <!-- Proficient: Filled circle icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-circle-fill" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="8"/>
+                                    </svg>
+                                {% else %}
+                                    <!-- Not proficient: Empty circle icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    </svg>
+                                {% endif %}
+                                <span>CHA</span>
+                                <span>{{ charisma_modifier }}</span>
+                            </div>
+                        </div>
+                        <p>Saving Throws modifiers</p>
+                    </div>
+                    <div class="row">
+                        <div class="additional_sense_types">
+                            <span>{{ intelligence_modifier }}</span>
+                            <span>Passive Perception</span>
+                        </div>
+                        <div class="additional_sense_types">
+                            <span>{{ intelligence_modifier }}</span>
+                            <span>Passive Investigation</span>
+                        </div>
+                        <div class="additional_sense_types">
+                            <span>{{ intelligence_modifier }}</span>
+                            <span>Passive Insight</span>
+                        </div>
+                        <p>Additional Sense Types</p>
+                    </div>
+                    <div class="row">
+                        <div class="proficiencies_training">
+                            <h4>Armor</h4>
+                            <p>Light Armor</p>
+                        </div>
+                        <div class="proficiencies_training">
+                            <h4>Weapons</h4>
+                            <p>Shortsword, Simple Weapons</p>
+                        </div>
+                        <div class="proficiencies_training">
+                            <h4>Tools</h4>
+                            <p>Dice Set</p>
+                        </div>
+                        <div class="proficiencies_training">
+                            <h4>Languages</h4>
+                            <p>Common</p>
+                        </div>
+                        <p>Proficiencies & Training</p>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <ul class="skills-tittle list-group list-group-horizontal m-0">
+                        <li class="list-group-item p-0"><p class="m-0">Prof</p></li>
+                        <li class="list-group-item p-0"><p class="w-100 m-0">Mod</p></li>
+                        <li class="list-group-item d-flex flex-grow-1 p-0"><p class="m-0">Skill</p></li>
+                        <li class="list-group-item p-0"><p class="m-0">Bonus</p></li>
+                    </ul>
+                    {% for skill in skills %}
+                        <ul class="skills list-group list-group-horizontal d-flex align-items-center py-1">
+                            <!-- Checkbox for Proficiency -->
+                            <li class="list-group-item px-2 py-0">
+                                {% if is_proficient %}
+                                    <!-- Proficient: Filled circle icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="green" class="bi bi-circle-fill" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="8"/>
+                                    </svg>
+                                {% else %}
+                                    <!-- Not proficient: Empty circle icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    </svg>
+                                {% endif %}
+                            </li>
+                            
+                            <!-- Ability Abbreviation (e.g., DEX) -->
+                            <li class="list-group-item m-0 p-0">
+                                <p class="m-0 w-100">{{ skill.abbr }}</p>
+                            </li>
+                            
+                            <!-- Skill Name (e.g., Acrobatics) -->
+                            <li class="list-group-item d-flex flex-grow-1 p-0">
+                                <p class="m-0">{{ skill.name }}</p>
+                            </li>
+                            
+                            <!-- Modifier (e.g., +6) -->
+                            <li class="list-group-item m-0 pe-2 py-0">
+                                <p class="m-0">{{ skill.modifier | add:skill.bonus }}</p> <!-- Add modifier and bonus -->
+                            </li>
+                        </ul>
+                    {% endfor %}
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-2">
+                            <h3>Initiative</h3>
+                            <p>{{ dexterity_modifier }}</p>
+                        </div>
+                        <div class="col-2">
+                            <h4>Armor</h4>
+                            <p>{{ character.charisma }}</p>
+                            <h4>Class</h4>
+                        </div>
+                        <div class="col-8">
+                            <h3>Charisma</h3>
+                            <p>{{ character.charisma }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <!-- Tabs navs -->
+                            <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a
+                                        class="nav-link active"
+                                        id="ex1-tab-1"
+                                        data-bs-toggle="tab"
+                                        href="#ex1-tabs-1"
+                                        role="tab"
+                                        aria-controls="ex1-tabs-1"
+                                        aria-selected="true"
+                                    >Actions</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a
+                                        class="nav-link"
+                                        id="ex1-tab-2"
+                                        data-bs-toggle="tab"
+                                        href="#ex1-tabs-2"
+                                        role="tab"
+                                        aria-controls="ex1-tabs-2"
+                                        aria-selected="false"
+                                    >Spells</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a
+                                        class="nav-link"
+                                        id="ex1-tab-3"
+                                        data-bs-toggle="tab"
+                                        href="#ex1-tabs-3"
+                                        role="tab"
+                                        aria-controls="ex1-tabs-3"
+                                        aria-selected="false"
+                                    >Inventory</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a
+                                        class="nav-link"
+                                        id="ex1-tab-4"
+                                        data-bs-toggle="tab"
+                                        href="#ex1-tabs-4"
+                                        role="tab"
+                                        aria-controls="ex1-tabs-4"
+                                        aria-selected="false"
+                                    >Features & Traits</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a
+                                        class="nav-link"
+                                        id="ex1-tab-5"
+                                        data-bs-toggle="tab"
+                                        href="#ex1-tabs-5"
+                                        role="tab"
+                                        aria-controls="ex1-tabs-5"
+                                        aria-selected="false"
+                                    >Notes</a>
+                                </li>
+                            </ul>
+
+                            <!-- Tabs content -->
+                            <div class="tab-content" id="ex1-content">
+                                <!-- Tab 1: Actions -->
+                                <div
+                                    class="tab-pane fade show active"
+                                    id="ex1-tabs-1"
+                                    role="tabpanel"
+                                    aria-labelledby="ex1-tab-1"
+                                >
+                                    <section class="actions row">
+                                        <div class="col-md-6">
+                                            <h3>Actions</h3>
+                                            <ul>
+                                                {% for item in character.inventory.all %}
+                                                <li>{{ item.name }} ({{ item.quantity }})</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </section>
+                                </div>
+
+                                <!-- Tab 2: Spells -->
+                                <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
+                                    <section class="spells row">
+                                        <div class="col-md-6">
+                                            <h3>Spells</h3>
+                                            <ul>
+                                                {% for spell in character.spells.all %}
+                                                <li>{{ spell.name }} (Level {{ spell.level }})</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </section>
+                                </div>
+
+                                <!-- Tab 3: Inventory -->
+                                <div class="tab-pane fade" id="ex1-tabs-3" role="tabpanel" aria-labelledby="ex1-tab-3">
+                                    <section class="inventory row">
+                                        <div class="col-md-6">
+                                            <h3>Inventory</h3>
+                                            <ul>
+                                                {% for item in character.inventory.all %}
+                                                <li>{{ item.name }} ({{ item.quantity }})</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </section>
+                                </div>
+                                <!-- Tab 3: Features & Traits -->
+                                <div class="tab-pane fade" id="ex1-tabs-4" role="tabpanel" aria-labelledby="ex1-tab-4">
+                                    <section class="features row">
+                                        <div class="col-md-12">
+                                            <h3>Features & Traits</h3>
+                                            <p>{{ character.notes }}</p>
+                                        </div>
+                                    </section>
+                                </div>
+                                <!-- Tab 3: Notes -->
+                                <div class="tab-pane fade" id="ex1-tabs-5" role="tabpanel" aria-labelledby="ex1-tab-5">
+                                    <section class="notes row">
+                                        <div class="col-md-12">
+                                            <h3>Notes</h3>
+                                            <p>{{ character.notes }}</p>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

@@ -27,6 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['8000-vretinger-dnddmtool-1qwebnlu32d.ws.codeinstitute-ide.net']
 
+# Ensure CSRF checks trust your Gitpod URL
+CSRF_TRUSTED_ORIGINS = [
+    'https://8000-vretinger-dnddmtool-1qwebnlu32d.ws.codeinstitute-ide.net',
+]
+
 
 # Application definition
 
@@ -37,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'charactersheets',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +60,7 @@ ROOT_URLCONF = 'dnd_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,6 +71,12 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
 ]
 
 WSGI_APPLICATION = 'dnd_site.wsgi.application'
@@ -98,6 +110,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+LOGIN_REDIRECT_URL = '/charactersheets/'
 
 
 # Internationalization

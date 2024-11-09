@@ -1,0 +1,83 @@
+.character-sheet {
+  background: #f8f9fa; /* Light background */
+  padding: 20px;
+  width: 1300px;
+}
+  
+.character-sheet section {
+  margin-bottom: 20px;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+}
+  
+.character-sheet h3 {
+  font-family: 'Cinzel', serif; /* Fantasy-style font */
+  border-bottom: 2px solid #343a40;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+  
+.character-sheet p, li {
+  font-family: 'Roboto', sans-serif;
+}
+
+.responsive-image {
+  width: 100%; /* Image takes full width of the container */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.attributes p{
+  color: white; /* Text color */
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7); /* Optional shadow for readability */
+  margin-bottom: 0;
+}
+
+.card-text {
+  font-size: 10px;
+}
+
+.card{
+  background-color: #343a40;
+  color: white; /* Text color */
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7); /* Optional shadow for readability */
+  max-height: 70px;
+}
+
+
+.border-container {
+  border: 2px solid #000; /* Border color */
+  padding: 15px; /* Inner space between border and content */
+  border-radius: 5px; /* Optional: Rounded corners */
+  margin: 10px 0; /* Space around the container */
+  background-color: #f9f9f9; /* Optional: Light background for contrast */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Soft shadow for depth */
+  overflow: hidden; /* Prevents content from overflowing */
+}
+
+.border-container h3,
+.border-container p {
+  font-size: 100%; /* Responsive font size */
+  line-height: 1.2; /* Spacing between lines for readability */
+  color: #6e6e6e; /* Text color */
+  margin: 5px 0; /* Space above and below paragraphs */
+  max-width: 100%; /* Ensures the text stays within the container */
+  overflow-wrap: break-word; /* Allows long words to break */
+}
+
+
+  
+.attributes, .skills, .inventory, .spells {
+  text-align: center;
+}
+  
+ul {
+  list-style-type: none;
+}
+  
+ul li {
+  padding: 5px 0;
+}
+  
+  

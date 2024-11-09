@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="text-center">
+        <h1>Welcome to the DnD Campaign Manager!</h1>
+        <p>This is your hub for managing character sheets and campaign info.</p>
+        <a href="{% url 'character_sheet_list' %}" class="btn btn-primary">Manage Your Character Sheets</a>
+    </div>
+{% endblock %}

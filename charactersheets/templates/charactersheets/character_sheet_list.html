@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Character Sheets{% endblock %}
+
+{% block content %}
+    <h1>Your Character Sheets</h1>
+    <ul>
+        {% for sheet in sheets %}
+            <li><a href="{% url 'character_sheet_detail' sheet.pk %}">{{ sheet.name }} - {{ sheet.character_class }}</a></li>
+        {% empty %}
+            <li>No character sheets yet. <a href="{% url 'character_sheet_create' %}">Create one!</a></li>
+        {% endfor %}
+        <li><a href="{% url 'character_sheet_create' %}">Create more! </a></li>
+    </ul>
+{% endblock %}
